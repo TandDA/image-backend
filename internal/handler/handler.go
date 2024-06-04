@@ -25,6 +25,8 @@ func (h *Handler) Start() {
 	photoGroup := e.Group("/photo")
 	photoGroup.Use(userAuthMiddleware)
 	photoGroup.POST("/post", h.postPhoto)
+	photoGroup.POST("/post/comment", h.postComment)
+	photoGroup.GET("/comment/:id", h.getCommentsByPhotoId)
 	photoGroup.POST("/like", h.likePhoto)
 	photoGroup.GET("/path", h.getPhotoByPath)
 	photoGroup.GET("", h.getAllPhotos)

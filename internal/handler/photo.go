@@ -95,21 +95,3 @@ func (h *Handler) postPhoto(c echo.Context) error {
 		"id": photoId,
 	})
 }
-
-func (h *Handler) likePhoto(c echo.Context) error {
-	photoId := c.QueryParam("photoId")
-	if photoId == "" {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "missing path param photoId"})
-	}
-	userId := jwt.GetUserIdFromContext(c)
-
-	query := `
-		INSERT INTO likes(photo_id, user_id) VALUES($1,$2);
-	`
-
-	_, err := h.db.Exec(query, photoId, userId)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Faileto to insert like: " + err.Error()})
-	}
-	return c.NoContent(http.StatusOK)
-}

@@ -23,6 +23,12 @@ type (
 		PhotoId int `json:"photo_id"`
 		UserId  int `json:"user_id"`
 	}
+	Comment struct {
+		Id      int    `json:"-"`
+		PhotoId int    `json:"photo_id,omitempty"`
+		UserId  int    `json:"user_id,omitempty"`
+		Text    string `json:"text"`
+	}
 )
 
 /*
