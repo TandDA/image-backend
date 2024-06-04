@@ -12,8 +12,9 @@ import (
 
 func (h *Handler) getAllPhotos(c echo.Context) error {
 	query := `
-	SELECT id, user_id, image_url
-	FROM photos;
+	SELECT p.id, p.user_id, p.image_url, COUNT(photo_id) AS likes FROM photos AS p
+	LEFT JOIN likes AS l ON l.photo_id = p.id
+	GROUP BY p.id;
 	`
 	rows, err := h.db.Query(query)
 	if err != nil {
@@ -22,7 +23,7 @@ func (h *Handler) getAllPhotos(c echo.Context) error {
 	var photos []model.Photo
 	for rows.Next() {
 		var photo model.Photo
-		err = rows.Scan(&photo.ID, &photo.UserID, &photo.ImageURL)
+		err = rows.Scan(&photo.ID, &photo.UserID, &photo.ImageURL, &photo.Likes)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 		}
@@ -93,4 +94,22 @@ func (h *Handler) postPhoto(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]int{
 		"id": photoId,
 	})
+}
+
+func (h *Handler) likePhoto(c echo.Context) error {
+	photoId := c.QueryParam("photoId")
+	if photoId == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "missing path param photoId"})
+	}
+	userId := jwt.GetUserIdFromContext(c)
+
+	query := `
+		INSERT INTO likes(photo_id, user_id) VALUES($1,$2);
+	`
+
+	_, err := h.db.Exec(query, photoId, userId)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Faileto to insert like: " + err.Error()})
+	}
+	return c.NoContent(http.StatusOK)
 }

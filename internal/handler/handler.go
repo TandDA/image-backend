@@ -25,6 +25,7 @@ func (h *Handler) Start() {
 	photoGroup := e.Group("/photo")
 	photoGroup.Use(userAuthMiddleware)
 	photoGroup.POST("/post", h.postPhoto)
+	photoGroup.POST("/like", h.likePhoto)
 	photoGroup.GET("/path", h.getPhotoByPath)
 	photoGroup.GET("", h.getAllPhotos)
 	e.Logger.Fatal(e.Start(":8080"))
