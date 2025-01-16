@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("sqlite3", "file:mydatabase.db?cache=shared&_fk=1")
+	db, err := sql.Open("sqlite3", "file:mydatabase.db?cache=shared&_fk=1") // open connection 123
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,7 +38,7 @@ func doMigration(db *sql.DB) {
 		log.Fatalf("Не удалось создать экземпляр миграции: %v", err)
 	}
 
-	// Применяем миграции.
+	// Применяем миграции. 3
 	err = m.Up()
 	if err != nil && err != migrate.ErrNoChange {
 		log.Fatalf("Ошибка при выполнении миграции: %v", err)
