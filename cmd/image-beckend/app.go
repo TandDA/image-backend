@@ -31,7 +31,7 @@ func doMigration(db *sql.DB) {
 
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://migrations", // Путь к директории с файлами миграции.1
-		"sqlite3",           // Имя драйвера базы данных.
+		"sqlite3",           // Имя драйвера базы данных. 2
 		driver,
 	)
 	if err != nil {
