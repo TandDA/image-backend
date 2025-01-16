@@ -19,17 +19,17 @@ func (h *Handler) Start() {
 	e := echo.New()
 
 	userGroup := e.Group("/user")
-	userGroup.POST("/create", h.createUser)
-	userGroup.POST("/auth", h.AuthUser)
+	userGroup.POST("/create", h.createUser) // Регистрация
+	userGroup.POST("/auth", h.AuthUser)     // Авторизация
 
 	photoGroup := e.Group("/photo")
 	photoGroup.Use(userAuthMiddleware)
-	photoGroup.POST("/post", h.postPhoto)
-	photoGroup.POST("/post/comment", h.postComment)
-	photoGroup.GET("/comment/:id", h.getCommentsByPhotoId)
-	photoGroup.POST("/like", h.likePhoto)
-	photoGroup.GET("/path", h.getPhotoByPath)
-	photoGroup.GET("", h.getAllPhotos)
+	photoGroup.POST("/post", h.postPhoto)                  // Загрузить фото
+	photoGroup.POST("/post/comment", h.postComment)        // Запостить комментарий
+	photoGroup.GET("/comment/:id", h.getCommentsByPhotoId) // Получить комметарии к фото
+	photoGroup.POST("/like", h.likePhoto)                  // Like фото
+	photoGroup.GET("/path", h.getPhotoByPath)              // Получить фото по его пути
+	photoGroup.GET("", h.getAllPhotos)                     // Получить все фото
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
