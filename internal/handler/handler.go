@@ -35,7 +35,7 @@ func (h *Handler) Start() {
 
 func userAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		err := jwt.ValidateJWT(c)
+		err := jwt.ValidateJWT(c) // auth
 		if err != nil {
 			return c.JSON(401, map[string]string{"error": err.Error()})
 		}
