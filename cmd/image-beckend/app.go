@@ -44,5 +44,5 @@ func doMigration(db *sql.DB) {
 		log.Fatalf("Ошибка при выполнении миграции: %v", err)
 	}
 
-	fmt.Println("Миграция успешно применена.")
+	fmt.Println("Миграция успешно применена")
 }
